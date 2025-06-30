@@ -1,6 +1,6 @@
 {
   "include": ["./src/**/*"],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "./src/aling/*", "./src/demo.tsx"],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
 

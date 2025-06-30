@@ -8,7 +8,16 @@ export default (props: RainProps) => {
   const { style, children } = props
   const rainstance = useRef<Rain>(
     new Rain("#aling-rain-cover", {
-      bg: "https://www.zhongfw.online/awsome/_next/image?url=https%3A%2F%2Fzhongfw.online%2Falign-minio%2Fmemoryimage%2F75b951f22850979b18dae0ec4e32b24f.jpeg&w=256&q=75",
+      bg: "img/weather/texture-rain-bg.png",
+      fg: "img/weather/texture-rain-fg.png",
+      onAbort() {
+        console.log("abort")
+      },
+      dropAlpha: "img/drop-alpha.png",
+      dropColor: "img/drop-color.png",
+      onInit() {
+        console.log("init")
+      },
     })
   )
 

@@ -4,37 +4,54 @@ interface ImageSource {
   img?: HTMLImageElement
 }
 
-type OnLoadFn = (img: HTMLImageElement, i: number) => void
+interface LoadedImage {
+  name: string
+  img: HTMLImageElement
+  src: string
+}
 
-type ImageInput = string | ImageSource
+interface ImageResult {
+  [key: string]: {
+    img: HTMLImageElement
+    src: string
+  }
+}
 
-type ImageLoaderResult = Record<string, { img: HTMLImageElement; src: string }>
+type OnLoadCallback = (img: HTMLImageElement, index: number) => void
 
-function loadImage(src: ImageInput, i: number, onLoad?: OnLoadFn): Promise<ImageSource> {
+function loadImage(
+  src: string | ImageSource,
+  i: number,
+  onLoad?: OnLoadCallback
+): Promise<LoadedImage> {
   return new Promise((resolve, reject) => {
-    let imageObj: ImageSource
-    if (typeof src == "string") {
-      imageObj = {
+    let imageSource: ImageSource
+
+    if (typeof src === "string") {
+      imageSource = {
         name: "image" + i,
         src,
       }
     } else {
-      imageObj = src
+      imageSource = src
     }
 
     let img = new Image()
-    imageObj.img = img
+    imageSource.img = img
     img.addEventListener("load", (event) => {
-      if (typeof onLoad == "function") {
+      if (typeof onLoad === "function") {
         onLoad.call(null, img, i)
       }
-      resolve(imageObj)
+      resolve(imageSource as LoadedImage)
     })
-    img.src = imageObj.src
+    img.src = imageSource.src
   })
 }
 
-function loadImages(images: ImageInput[], onLoad?: OnLoadFn): Promise<ImageSource[]> {
+function loadImages(
+  images: (string | ImageSource)[],
+  onLoad?: OnLoadCallback
+): Promise<LoadedImage[]> {
   return Promise.all(
     images.map((src, i) => {
       return loadImage(src, i, onLoad)
@@ -43,18 +60,19 @@ function loadImages(images: ImageInput[], onLoad?: OnLoadFn): Promise<ImageSourc
 }
 
 export default function ImageLoader(
-  images: ImageInput[],
-  onLoad?: OnLoadFn
-): Promise<ImageLoaderResult> {
+  images: (string | ImageSource)[],
+  onLoad?: OnLoadCallback
+): Promise<ImageResult> {
   return new Promise((resolve, reject) => {
     loadImages(images, onLoad).then((loadedImages) => {
-      const r: ImageLoaderResult = {}
+      let r: ImageResult = {}
       loadedImages.forEach((curImage) => {
         r[curImage.name] = {
-          img: curImage.img!,
+          img: curImage.img,
           src: curImage.src,
         }
       })
+
       resolve(r)
     })
   })

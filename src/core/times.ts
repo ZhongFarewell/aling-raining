@@ -1,5 +1,5 @@
-export default function times(this: any, n: number, f: (i: number) => void) {
+export default function times(n: number, f: (index: number) => void): void {
   for (let i = 0; i < n; i++) {
-    f.call(this, i)
+    f(i)
   }
 }

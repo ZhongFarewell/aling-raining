@@ -1,18 +1,30 @@
-export function random(from?: number, to?: number, interpolation?: (n: number) => number) {
-  if (from === undefined) {
-    from = 0
-    to = 1
-  } else if (from !== undefined && to === undefined) {
-    to = from
-    from = 0
-  }
-  const delta = (to as number) - (from as number)
+export function random(from?: number, to?: number, interpolation?: (n: number) => number): number {
+  let start: number
+  let end: number
+  let interp: (n: number) => number
 
-  if (!interpolation) {
-    interpolation = (n: number) => n
+  if (from === undefined) {
+    start = 0
+    end = 1
+  } else if (from !== undefined && to === undefined) {
+    end = from
+    start = 0
+  } else {
+    start = from!
+    end = to!
   }
-  return (from as number) + interpolation(Math.random()) * delta
+
+  const delta = end - start
+
+  if (interpolation === undefined) {
+    interp = (n: number) => n
+  } else {
+    interp = interpolation
+  }
+
+  return start + interp(Math.random()) * delta
 }
-export function chance(c: any) {
+
+export function chance(c: number): boolean {
   return random() <= c
 }

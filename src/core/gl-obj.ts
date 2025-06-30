@@ -1,77 +1,91 @@
 import * as WebGL from "./webgl"
 
 export default class GL {
-  canvas!: HTMLCanvasElement
-  gl: WebGLRenderingContext | null = null
-  program: WebGLProgram | null = null
-  width: number = 0
-  height: number = 0
-  textures: (WebGLTexture | null)[] = []
+  public canvas: HTMLCanvasElement | null = null
+  public gl: WebGLRenderingContext | null = null
+  public program: WebGLProgram | null = null
+  public width: number = 0
+  public height: number = 0
+  public textures: (WebGLTexture | null)[] = []
 
-  constructor(canvas: HTMLCanvasElement, options: any, vert: string, frag: string) {
+  constructor(
+    canvas: HTMLCanvasElement,
+    options: WebGLContextAttributes,
+    vert: string,
+    frag: string
+  ) {
     this.init(canvas, options, vert, frag)
   }
 
-  init(canvas: HTMLCanvasElement, options: any, vert: string, frag: string) {
+  private init(
+    canvas: HTMLCanvasElement,
+    options: WebGLContextAttributes,
+    vert: string,
+    frag: string
+  ): void {
     this.canvas = canvas
     this.width = canvas.width
     this.height = canvas.height
     this.gl = WebGL.getContext(canvas, options)
     this.program = this.createProgram(vert, frag)
-    this.useProgram(this.program)
+    if (this.program) {
+      this.useProgram(this.program)
+    }
   }
 
-  createProgram(vert: string, frag: string): WebGLProgram | null {
-    return WebGL.createProgram(this.gl!, vert, frag)
+  private createProgram(vert: string, frag: string): WebGLProgram | null {
+    if (!this.gl) return null
+    let program = WebGL.createProgram(this.gl, vert, frag)
+    return program
   }
 
-  useProgram(program: WebGLProgram | null) {
+  public useProgram(program: WebGLProgram): void {
     this.program = program
-    if (this.gl && program) {
+    if (this.gl) {
       this.gl.useProgram(program)
     }
   }
 
-  createTexture(source: TexImageSource | null, i: number) {
+  public createTexture(source: TexImageSource | null, i: number): WebGLTexture | null {
     if (!this.gl) return null
     const texture = WebGL.createTexture(this.gl, source, i)
     this.textures[i] = texture
     return texture
   }
 
-  deleteProgram() {
+  public deleteProgram(): void {
     if (this.program && this.gl) {
       this.gl.deleteProgram(this.program)
       this.program = null
     }
   }
 
-  deleteTexture(i: number) {
+  public deleteTexture(i: number): void {
     if (this.textures && this.textures[i] && this.gl) {
-      this.gl.deleteTexture(this.textures[i])
+      this.gl.deleteTexture(this.textures[i]!)
       this.textures[i] = null
     }
   }
 
-  createUniform(type: string, name: string, ...v: any[]) {
+  public createUniform(type: string, name: string, ...v: any[]): void {
     if (this.gl && this.program) {
       WebGL.createUniform(this.gl, this.program, type, name, ...v)
     }
   }
 
-  activeTexture(i: number) {
+  public activeTexture(i: number): void {
     if (this.gl) {
       WebGL.activeTexture(this.gl, i)
     }
   }
 
-  updateTexture(source: TexImageSource) {
+  public updateTexture(source: TexImageSource): void {
     if (this.gl) {
       WebGL.updateTexture(this.gl, source)
     }
   }
 
-  draw() {
+  public draw(): void {
     if (this.gl) {
       WebGL.setRectangle(this.gl, -1, -1, 2, 2)
       this.gl.drawArrays(this.gl.TRIANGLES, 0, 6)

@@ -1,4 +1,4 @@
-export default function createCanvas(width: number, height: number) {
+export default function createCanvas(width: number, height: number): HTMLCanvasElement {
   let canvas = document.createElement("canvas")
   canvas.width = width
   canvas.height = height

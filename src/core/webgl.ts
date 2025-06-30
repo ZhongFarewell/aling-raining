@@ -1,10 +1,13 @@
-export function getContext(canvas: HTMLCanvasElement, options = {}) {
+export function getContext(
+  canvas: HTMLCanvasElement,
+  options: WebGLContextAttributes = {}
+): WebGLRenderingContext | null {
   let contexts = ["webgl", "experimental-webgl"]
-  let context: RenderingContext | WebGLRenderingContext | null = null
+  let context: WebGLRenderingContext | null = null
 
   contexts.some((name) => {
     try {
-      context = canvas.getContext(name, options)
+      context = canvas.getContext(name, options) as WebGLRenderingContext
     } catch (e) {}
     return context != null
   })
@@ -16,18 +19,23 @@ export function getContext(canvas: HTMLCanvasElement, options = {}) {
   return context
 }
 
-export function createProgram(gl: WebGLRenderingContext, vertexScript: string, fragScript: string) {
+export function createProgram(
+  gl: WebGLRenderingContext,
+  vertexScript: string,
+  fragScript: string
+): WebGLProgram | null {
   let vertexShader = createShader(gl, vertexScript, gl.VERTEX_SHADER)
   let fragShader = createShader(gl, fragScript, gl.FRAGMENT_SHADER)
 
-  let program = gl.createProgram()
-  if (vertexShader && fragShader) {
-    gl.attachShader(program, vertexShader)
-    gl.attachShader(program, fragShader)
-  } else {
-    error("Shader creation failed")
+  if (!vertexShader || !fragShader) {
     return null
   }
+
+  let program = gl.createProgram()
+  if (!program) {
+    return null
+  }
+
   gl.attachShader(program, vertexShader)
   gl.attachShader(program, fragShader)
 
@@ -63,12 +71,16 @@ export function createProgram(gl: WebGLRenderingContext, vertexScript: string, f
   return program
 }
 
-export function createShader(gl: WebGLRenderingContext, script: string, type: number) {
+export function createShader(
+  gl: WebGLRenderingContext,
+  script: string,
+  type: number
+): WebGLShader | null {
   let shader = gl.createShader(type)
   if (!shader) {
-    error("Unable to create shader")
     return null
   }
+
   gl.shaderSource(shader, script)
   gl.compileShader(shader)
 
@@ -82,8 +94,17 @@ export function createShader(gl: WebGLRenderingContext, script: string, type: nu
   }
   return shader
 }
-export function createTexture(gl: WebGLRenderingContext, source: TexImageSource | null, i: number) {
+
+export function createTexture(
+  gl: WebGLRenderingContext,
+  source: TexImageSource | null,
+  i: number
+): WebGLTexture | null {
   var texture = gl.createTexture()
+  if (!texture) {
+    return null
+  }
+
   activeTexture(gl, i)
   gl.bindTexture(gl.TEXTURE_2D, texture)
 
@@ -101,29 +122,33 @@ export function createTexture(gl: WebGLRenderingContext, source: TexImageSource 
 
   return texture
 }
+
 export function createUniform(
-  gl: WebGLRenderingContext | any,
+  gl: WebGLRenderingContext,
   program: WebGLProgram,
   type: string,
   name: string,
   ...args: any[]
-) {
+): void {
   let location = gl.getUniformLocation(program, "u_" + name)
-  gl["uniform" + type](location, ...args)
+  ;(gl as any)["uniform" + type](location, ...args)
 }
-export function activeTexture(gl: WebGLRenderingContext | any, i: number) {
-  gl.activeTexture(gl["TEXTURE" + i])
+
+export function activeTexture(gl: WebGLRenderingContext, i: number): void {
+  ;(gl as any).activeTexture((gl as any)["TEXTURE" + i])
 }
-export function updateTexture(gl: WebGLRenderingContext, source: TexImageSource) {
+
+export function updateTexture(gl: WebGLRenderingContext, source: TexImageSource): void {
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source)
 }
+
 export function setRectangle(
   gl: WebGLRenderingContext,
   x: number,
   y: number,
   width: number,
   height: number
-) {
+): void {
   var x1 = x
   var x2 = x + width
   var y1 = y
@@ -135,6 +160,6 @@ export function setRectangle(
   )
 }
 
-function error(msg: any) {
+function error(msg: string): void {
   console.error(msg)
 }

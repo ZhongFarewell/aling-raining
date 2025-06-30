@@ -1,11 +1,9 @@
-import { loadTextures, abort } from "./common-rain"
-export interface RainOptions {
-  bg?: string //背景图片
-}
+import { loadTextures, abort, BaseCommonRainOptions } from "./common-rain"
+export interface RainOptions extends BaseCommonRainOptions {}
 export default class Rain {
   private _id: string
-  private _options?: RainOptions
-  constructor(id: string, options?: RainOptions) {
+  private _options: RainOptions
+  constructor(id: string, options: RainOptions) {
     this._id = id
     this._options = options
   }
