@@ -1,7 +1,9 @@
-# Aling
+# Aling Raining
 
-#### Introduction
-This is a collection of "quirky" component libraries I've developed during my work. Examples include a button and upload functionality styled after the WeChat Moments interface, as well as a form component, AForm, with preconfigured features.
+A WebGL-based raindrop effect library with TypeScript support. This project is a TypeScript build based on [Rain Effect](https://github.com/codrops/RainEffect) (special thanks to the original author). For more details, see my [blog post](https://www.zhongfw.online/awsome/posts/c9b37a098263cea38606f03c82d4db4b).
 
-#### Software Architecture
-These components are built on top of antd and antd-mobile, fully compatible with the original antd component props while adding some additional props. The styling scheme is based on Cij, and the library used is Mui.
+## Installation
+
+```bash
+npm install aling-raining
+```

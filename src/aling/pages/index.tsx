@@ -8,8 +8,8 @@ export default function () {
   const navigate = useNavigate()
   return (
     <>
-      <button onClick={() => navigate("rain")}>调</button>
-      <Rain>gdfgf</Rain>
+      <button onClick={() => navigate("rain")}>跳转</button>
+      <Rain>基本示例</Rain>
     </>
   )
 }
