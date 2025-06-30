@@ -44,7 +44,11 @@ function loadImage(
       }
       resolve(imageSource as LoadedImage)
     })
-    img.src = imageSource.src
+
+    // 添加时间戳参数来避免缓存
+    const timestamp = new Date().getTime()
+    const separator = imageSource.src.includes("?") ? "&" : "?"
+    img.src = `${imageSource.src}${separator}_t=${timestamp}`
   })
 }
 
