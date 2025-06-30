@@ -1,0 +1,24 @@
+{
+  "name": "aling-raining",
+  "version": "0.2.7",
+  "description": "下雨的效果",
+  "main": "./dist/lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc --project ./tsconfig.build.json",
+    "start": "webpack serve --config ./config/webpack.config.js",
+    "publish": "npm run build & npm publish"
+  },
+  "files": [
+    "dist/lib"
+  ],
+  "keywords": [
+    "raineEffect"
+  ],
+  "author": "Aling",
+  "license": "ISC",
+  "dependencies": {
+    "core-js": "^3.43.0",
+    "gsap": "^3.13.0"
+  }
+}
