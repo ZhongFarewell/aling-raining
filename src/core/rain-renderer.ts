@@ -19,15 +19,27 @@ interface TextureItem {
   img: HTMLImageElement | HTMLCanvasElement
 }
 
+/**
+ * RainRenderer 默认参数配置：
+ *
+ * renderShadow: 是否渲染水滴阴影（true/false）
+ * minRefraction: 折射最小值，影响水滴的折射强度
+ * maxRefraction: 折射最大值，影响水滴的折射强度
+ * brightness: 整体亮度系数
+ * alphaMultiply: alpha 通道乘法系数（影响水滴透明度）
+ * alphaSubtract: alpha 通道减法系数（影响水滴透明度）
+ * parallaxBg: 背景视差系数
+ * parallaxFg: 前景视差系数
+ */
 const defaultOptions: Required<RainRendererOptions> = {
-  renderShadow: false,
-  minRefraction: 256,
-  maxRefraction: 512,
-  brightness: 1,
-  alphaMultiply: 20,
-  alphaSubtract: 5,
-  parallaxBg: 5,
-  parallaxFg: 20,
+  renderShadow: false, // 是否渲染水滴阴影
+  minRefraction: 256, // 折射最小值
+  maxRefraction: 512, // 折射最大值
+  brightness: 1, // 亮度系数
+  alphaMultiply: 20, // alpha 通道乘法系数
+  alphaSubtract: 5, // alpha 通道减法系数
+  parallaxBg: 5, // 背景视差系数
+  parallaxFg: 20, // 前景视差系数
 }
 
 class RainRenderer {
@@ -106,8 +118,6 @@ class RainRenderer {
   }
 
   public abort(): void {
-    console.log("abort")
-
     // 1. 停止动画循环
     if (this._animationFrameId) {
       cancelAnimationFrame(this._animationFrameId)

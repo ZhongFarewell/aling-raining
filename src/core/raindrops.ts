@@ -42,26 +42,50 @@ interface RaindropsOptions {
   collisionBoost?: number
 }
 
+// Raindrops 的默认配置项
+/**
+ * Raindrops 默认参数配置：
+ *
+ * minR: 最小水滴半径，单位像素
+ * maxR: 最大水滴半径，单位像素
+ * maxDrops: 画布上最大水滴数量
+ * rainChance: 每帧生成雨滴的概率（0~1）
+ * rainLimit: 每帧最大生成雨滴数量
+ * dropletsRate: 小水滴生成速率（每帧）
+ * dropletsSize: 小水滴半径范围 [最小, 最大]
+ * dropletsCleaningRadiusMultiplier: 清除小水滴时的半径缩放系数
+ * raining: 是否下雨（true/false）
+ * globalTimeScale: 全局时间缩放因子（影响动画快慢）
+ * trailRate: 拖尾生成速率
+ * autoShrink: 是否自动收缩小水滴
+ * spawnArea: 雨滴生成区域的纵向范围（相对 0~1）
+ * trailScaleRange: 拖尾水滴的缩放范围 [最小, 最大]
+ * collisionRadius: 碰撞检测半径系数
+ * collisionRadiusIncrease: 碰撞检测半径随动量增加的增量
+ * dropFallMultiplier: 雨滴下落速度系数
+ * collisionBoostMultiplier: 碰撞后动量提升系数
+ * collisionBoost: 碰撞后基础动量提升
+ */
 const defaultOptions: Required<RaindropsOptions> = {
-  minR: 10,
-  maxR: 40,
-  maxDrops: 900,
-  rainChance: 0.3,
-  rainLimit: 3,
-  dropletsRate: 50,
-  dropletsSize: [2, 4],
-  dropletsCleaningRadiusMultiplier: 0.43,
-  raining: true,
-  globalTimeScale: 1,
-  trailRate: 1,
-  autoShrink: true,
-  spawnArea: [-0.1, 0.95],
-  trailScaleRange: [0.2, 0.5],
-  collisionRadius: 0.65,
-  collisionRadiusIncrease: 0.01,
-  dropFallMultiplier: 1,
-  collisionBoostMultiplier: 0.05,
-  collisionBoost: 1,
+  minR: 10, // 最小水滴半径
+  maxR: 40, // 最大水滴半径
+  maxDrops: 900, // 最大水滴数量
+  rainChance: 0.3, // 每帧生成雨滴的概率
+  rainLimit: 3, // 每帧最大生成雨滴数量
+  dropletsRate: 50, // 小水滴生成速率
+  dropletsSize: [2, 4], // 小水滴半径范围
+  dropletsCleaningRadiusMultiplier: 0.43, // 清除小水滴时的半径缩放
+  raining: true, // 是否下雨
+  globalTimeScale: 1, // 全局时间缩放
+  trailRate: 1, // 拖尾生成速率
+  autoShrink: true, // 是否自动收缩
+  spawnArea: [-0.1, 0.95], // 雨滴生成区域
+  trailScaleRange: [0.2, 0.5], // 拖尾水滴缩放范围
+  collisionRadius: 0.65, // 碰撞检测半径系数
+  collisionRadiusIncrease: 0.01, // 碰撞检测半径增量
+  dropFallMultiplier: 1, // 下落速度系数
+  collisionBoostMultiplier: 0.05, // 碰撞动量提升系数
+  collisionBoost: 1, // 碰撞基础动量提升
 }
 
 export default class Raindrops {

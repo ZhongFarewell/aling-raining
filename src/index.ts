@@ -1,1 +1,1 @@
-export * from "./core"
+export { default as Rain, RainOptions } from "./core"

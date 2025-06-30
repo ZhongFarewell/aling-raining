@@ -37,6 +37,9 @@ export interface BaseCommonRainOptions {
   dropColor: string
   dropAlpha: string
   onAbort?: () => void
+  minR?: number // 最小水滴半径
+  maxR?: number // 最大水滴半径
+  maxDrops?: number // 最大水滴数量
 }
 interface LoadTexturesOptions extends BaseCommonRainOptions {
   [key: string]: any
@@ -176,6 +179,9 @@ class CommonRain {
         trailScaleRange: [0.2, 0.45],
         collisionRadius: 0.45,
         dropletsCleaningRadiusMultiplier: 0.28,
+        maxDrops: this.options?.maxDrops,
+        minR: this.options?.minR,
+        maxR: this.options?.maxR,
       }
     )
 
