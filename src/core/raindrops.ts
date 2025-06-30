@@ -1,6 +1,6 @@
-import times from "./times.js"
-import createCanvas from "./create-canvas.js"
-import { random, chance } from "./random.js"
+import times from './times.js'
+import createCanvas from './create-canvas.js'
+import { random, chance } from './random.js'
 
 let dropSize = 64
 
@@ -66,7 +66,7 @@ interface RaindropsOptions {
  * collisionBoostMultiplier: 碰撞后动量提升系数
  * collisionBoost: 碰撞后基础动量提升
  */
-const defaultOptions: Required<RaindropsOptions> = {
+export const raindropsDefaultOptions: Required<RaindropsOptions> = {
   minR: 10, // 最小水滴半径
   maxR: 40, // 最大水滴半径
   maxDrops: 900, // 最大水滴数量
@@ -85,7 +85,7 @@ const defaultOptions: Required<RaindropsOptions> = {
   collisionRadiusIncrease: 0.01, // 碰撞检测半径增量
   dropFallMultiplier: 1, // 下落速度系数
   collisionBoostMultiplier: 0.05, // 碰撞动量提升系数
-  collisionBoost: 1, // 碰撞基础动量提升
+  collisionBoost: 1 // 碰撞基础动量提升
 }
 
 export default class Raindrops {
@@ -122,19 +122,19 @@ export default class Raindrops {
     this.scale = scale
     this.dropAlpha = dropAlpha
     this.dropColor = dropColor
-    this.options = Object.assign({}, defaultOptions, options)
+    this.options = Object.assign({}, raindropsDefaultOptions, options)
     this.init()
   }
 
   private init(): void {
     this.canvas = createCanvas(this.width, this.height)
-    this.ctx = this.canvas.getContext("2d")
+    this.ctx = this.canvas.getContext('2d')
 
     this.droplets = createCanvas(
       this.width * this.dropletsPixelDensity,
       this.height * this.dropletsPixelDensity
     )
-    this.dropletsCtx = this.droplets.getContext("2d")
+    this.dropletsCtx = this.droplets.getContext('2d')
 
     // 水滴对象的集合
     this.drops = []
@@ -172,13 +172,13 @@ export default class Raindrops {
       parent: null,
       isNew: true,
       killed: false,
-      shrink: 0,
+      shrink: 0
     })
   }
 
   //重新加载
   public reload(): void {
-    console.log("开始重新加载Canvas...")
+    console.log('开始重新加载Canvas...')
 
     // 1. 停止当前动画循环
     this.pauseAnimation()
@@ -265,13 +265,13 @@ export default class Raindrops {
   // 绘制水滴的样式
   private renderDropsGfx(): void {
     let dropBuffer = createCanvas(dropSize, dropSize)
-    let dropBufferCtx = dropBuffer.getContext("2d")
+    let dropBufferCtx = dropBuffer.getContext('2d')
     if (!dropBufferCtx) return
 
     //生成255个不同样式的水滴
     this.dropsGfx = Array.apply(null, Array(255)).map((cur, i) => {
       let drop = createCanvas(dropSize, dropSize)
-      let dropCtx = drop.getContext("2d")
+      let dropCtx = drop.getContext('2d')
       if (!dropCtx) return drop
 
       dropBufferCtx.clearRect(0, 0, dropSize, dropSize)
@@ -279,29 +279,29 @@ export default class Raindrops {
       // 看样子下面这段代码通过颜色的合成，来实现不同深度的蓝色，具体为什么这么些就触及到我的知识盲区了。
       // color
       //绘制图片
-      dropBufferCtx.globalCompositeOperation = "source-over"
+      dropBufferCtx.globalCompositeOperation = 'source-over'
       dropBufferCtx.drawImage(this.dropColor, 0, 0, dropSize, dropSize)
 
       // blue overlay, for depth
       // 绘制不同深度的蓝色
-      dropBufferCtx.globalCompositeOperation = "screen"
-      dropBufferCtx.fillStyle = "rgba(0,0," + i + ",1)"
+      dropBufferCtx.globalCompositeOperation = 'screen'
+      dropBufferCtx.fillStyle = 'rgba(0,0,' + i + ',1)'
       dropBufferCtx.fillRect(0, 0, dropSize, dropSize)
 
       // alpha
-      dropCtx.globalCompositeOperation = "source-over"
+      dropCtx.globalCompositeOperation = 'source-over'
       dropCtx.drawImage(this.dropAlpha, 0, 0, dropSize, dropSize)
 
-      dropCtx.globalCompositeOperation = "source-in"
+      dropCtx.globalCompositeOperation = 'source-in'
       dropCtx.drawImage(dropBuffer, 0, 0, dropSize, dropSize)
       return drop
     })
 
     // create circle that will be used as a brush to remove droplets
     this.clearDropletsGfx = createCanvas(128, 128)
-    let clearDropletsCtx = this.clearDropletsGfx.getContext("2d")
+    let clearDropletsCtx = this.clearDropletsGfx.getContext('2d')
     if (clearDropletsCtx) {
-      clearDropletsCtx.fillStyle = "#000"
+      clearDropletsCtx.fillStyle = '#000'
       clearDropletsCtx.beginPath()
       clearDropletsCtx.arc(64, 64, 64, 0, Math.PI * 2)
       clearDropletsCtx.fill()
@@ -323,7 +323,7 @@ export default class Raindrops {
       d *= 1 / ((drop.spreadX + drop.spreadY) * 0.5 + 1)
 
       ctx.globalAlpha = 1
-      ctx.globalCompositeOperation = "source-over"
+      ctx.globalCompositeOperation = 'source-over'
 
       d = Math.floor(d * (this.dropsGfx.length - 1))
       ctx.drawImage(
@@ -341,7 +341,7 @@ export default class Raindrops {
     if (!this.dropletsCtx || !this.clearDropletsGfx) return
 
     let ctx = this.dropletsCtx
-    ctx.globalCompositeOperation = "destination-out"
+    ctx.globalCompositeOperation = 'destination-out'
 
     // 清除小水滴
     ctx.drawImage(
@@ -377,7 +377,7 @@ export default class Raindrops {
       isNew: true,
       killed: false,
       shrink: 0,
-      ...options,
+      ...options
     }
   }
 
@@ -408,7 +408,7 @@ export default class Raindrops {
           r: r,
           momentum: 1 + (r - this.options.minR) * 0.1 + random(2),
           spreadX: 1.5,
-          spreadY: 1.5,
+          spreadY: 1.5
         })
         if (rainDrop != null) {
           rainDrops.push(rainDrop)
@@ -448,8 +448,8 @@ export default class Raindrops {
     //消除水滴的痕迹
     if (this.textureCleaningIterations > 0) {
       this.textureCleaningIterations -= 1 * timeScale
-      this.dropletsCtx.globalCompositeOperation = "destination-out"
-      this.dropletsCtx.fillStyle = "rgba(0,0,0," + 0.05 * timeScale + ")"
+      this.dropletsCtx.globalCompositeOperation = 'destination-out'
+      this.dropletsCtx.fillStyle = 'rgba(0,0,0,' + 0.05 * timeScale + ')'
       this.dropletsCtx.fillRect(
         0,
         0,
@@ -523,7 +523,7 @@ export default class Raindrops {
               y: drop.y - drop.r * 0.01,
               r: drop.r * random(this.options.trailScaleRange[0], this.options.trailScaleRange[1]),
               spreadY: drop.momentum * 0.1,
-              parent: drop,
+              parent: drop
             })
 
             if (trailDrop != null) {

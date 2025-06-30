@@ -1,11 +1,11 @@
-import "core-js"
-import RainRenderer from "./rain-renderer"
-import Raindrops from "./raindrops"
-import loadImages from "./image-loader"
-import createCanvas from "./create-canvas"
-import TweenLite, { Quint } from "gsap"
-import times from "./times"
-import { random, chance } from "./random"
+import 'core-js'
+import RainRenderer from './rain-renderer'
+import Raindrops from './raindrops'
+import loadImages from './image-loader'
+import createCanvas from './create-canvas'
+import TweenLite, { Quint } from 'gsap'
+import times from './times'
+import { random, chance } from './random'
 
 // 类型定义
 interface WeatherOptions {
@@ -92,11 +92,11 @@ class CommonRain {
   private options: BaseCommonRainOptions | undefined
   private readonly textureBgSize: TextureSize = {
     width: 384,
-    height: 256,
+    height: 256
   }
   private readonly textureFgSize: TextureSize = {
     width: 96,
-    height: 64,
+    height: 64
   }
 
   private raindrops!: Raindrops
@@ -115,11 +115,11 @@ class CommonRain {
 
     try {
       const images: LoadedImages = await loadImages([
-        { name: "dropAlpha", src: dropAlpha },
-        { name: "dropColor", src: dropColor },
+        { name: 'dropAlpha', src: dropAlpha },
+        { name: 'dropColor', src: dropColor },
 
-        { name: "textureRainFg", src: fg ?? bg },
-        { name: "textureRainBg", src: bg },
+        { name: 'textureRainFg', src: fg ?? bg },
+        { name: 'textureRainBg', src: bg }
 
         //{ name: "textureStormLightningFg", src: "img/weather/texture-storm-lightning-fg.png" },
         //{ name: "textureStormLightningBg", src: "img/weather/texture-storm-lightning-bg.png" },
@@ -155,18 +155,18 @@ class CommonRain {
       this.init(selector)
       onInit?.()
     } catch (error) {
-      console.error("Failed to load textures:", error)
+      console.error('Failed to load textures:', error)
     }
   }
 
   private init(selector?: string): void {
-    this.canvas = document.querySelector(selector ?? "#aling-rain-cover") as HTMLCanvasElement
+    this.canvas = document.querySelector(selector ?? '#aling-rain-cover') as HTMLCanvasElement
 
     const dpi = window.devicePixelRatio
     this.canvas.width = window.innerWidth * dpi
     this.canvas.height = window.innerHeight * dpi
-    this.canvas.style.width = window.innerWidth + "px"
-    this.canvas.style.height = window.innerHeight + "px"
+    this.canvas.style.width = window.innerWidth + 'px'
+    this.canvas.style.height = window.innerHeight + 'px'
 
     this.raindrops = new Raindrops(
       this.canvas.width,
@@ -179,16 +179,20 @@ class CommonRain {
         trailScaleRange: [0.2, 0.45],
         collisionRadius: 0.45,
         dropletsCleaningRadiusMultiplier: 0.28,
-        maxDrops: this.options?.maxDrops,
-        minR: this.options?.minR,
-        maxR: this.options?.maxR,
+        ...JSON.parse(
+          JSON.stringify({
+            maxDrops: this.options?.maxDrops,
+            minR: this.options?.minR,
+            maxR: this.options?.maxR
+          })
+        )
       }
     )
 
     this.textureFg = createCanvas(this.textureFgSize.width, this.textureFgSize.height)
-    this.textureFgCtx = this.textureFg.getContext("2d")!
+    this.textureFgCtx = this.textureFg.getContext('2d')!
     this.textureBg = createCanvas(this.textureBgSize.width, this.textureBgSize.height)
-    this.textureBgCtx = this.textureBg.getContext("2d")!
+    this.textureBgCtx = this.textureBg.getContext('2d')!
 
     this.generateTextures(this.textureRainFg, this.textureRainBg)
 
@@ -201,7 +205,7 @@ class CommonRain {
       {
         brightness: 1.04,
         alphaMultiply: 6,
-        alphaSubtract: 3,
+        alphaSubtract: 3
         // minRefraction:256,
         // maxRefraction:512
       }
@@ -223,7 +227,7 @@ class CommonRain {
   }
 
   private setupParallax(): void {
-    document.addEventListener("mousemove", (event: MouseEvent) => {
+    document.addEventListener('mousemove', (event: MouseEvent) => {
       const x = event.pageX
       const y = event.pageY
 
@@ -234,7 +238,7 @@ class CommonRain {
         onUpdate: () => {
           this.renderer.parallaxX = this.parallax.x
           this.renderer.parallaxY = this.parallax.y
-        },
+        }
       })
     })
   }
