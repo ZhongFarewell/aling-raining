@@ -1,4 +1,4 @@
-# Aling Raining
+![d9b32a87dbf89575e5769f4ef990ff27 (1)](https://github.com/user-attachments/assets/1f3c72c4-f016-4572-bc1c-e4bf3d74eb3f)# Aling Raining
 
 一个基于 WebGL 的雨滴效果库，支持 TypeScript。
 
@@ -11,4 +11,4 @@ npm install aling-raining
 ```
 
 ## 预览
-![demo](https://zhongfw.online/align-minio/memoryimage/d9b32a87dbf89575e5769f4ef990ff27.gif)
+![d9b32a87dbf89575e5769f4ef990ff27 (1)](https://github.com/user-attachments/assets/3fca7e47-f11f-41a9-8aa6-7763a2a5935d)
