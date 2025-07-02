@@ -1,4 +1,4 @@
-![d9b32a87dbf89575e5769f4ef990ff27 (1)](https://github.com/user-attachments/assets/1f3c72c4-f016-4572-bc1c-e4bf3d74eb3f)# Aling Raining
+# Aling Raining
 
 一个基于 WebGL 的雨滴效果库，支持 TypeScript。
 
