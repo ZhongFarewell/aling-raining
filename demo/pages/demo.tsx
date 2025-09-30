@@ -8,13 +8,10 @@ export default (props: RainProps) => {
   const { style, children } = props
   const rainstance = useRef<Rain>(
     new Rain('#aling-rain-cover', {
-      bg: 'img/weather/texture-rain-bg.png',
-      fg: 'img/weather/texture-rain-fg.png',
       video: '#video-el',
       onAbort() {
         console.log('abort')
       },
-      maxDrops: 1000,
       minR: 30,
       maxR: 60,
       dropAlpha: 'img/drop-alpha.png',

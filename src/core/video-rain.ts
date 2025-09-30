@@ -4,7 +4,7 @@ import Raindrops from './raindrops'
 import loadImages from './image-loader'
 import createCanvas from './create-canvas'
 import TweenLite, { Quint } from 'gsap'
-import { BaseCommonRainOptions } from './common-rain'
+import { BaseCommonRainOptions, BaseRainOptions } from './common-rain'
 
 // 类型定义
 interface WeatherOptions {
@@ -29,10 +29,9 @@ interface WeatherOptions {
 interface WeatherData {
   [key: string]: WeatherOptions
 }
-export interface VideoRainOptions extends BaseCommonRainOptions {
+export interface VideoRainOptions extends BaseRainOptions {
   onInit?: () => void
-  fg?: string
-  video: string
+  video?: string
   dropColor: string
   dropAlpha: string
   onAbort?: () => void
@@ -40,7 +39,7 @@ export interface VideoRainOptions extends BaseCommonRainOptions {
   maxR?: number // 最大水滴半径
   maxDrops?: number // 最大水滴数量
 }
-interface LoadTexturesOptions extends BaseCommonRainOptions {
+export interface VideoLoadTexturesOptions extends VideoRainOptions {
   [key: string]: any
 }
 
@@ -89,7 +88,7 @@ class VideoRain {
   private textureBg!: HTMLCanvasElement
   private textureBgCtx!: CanvasRenderingContext2D
 
-  private options: BaseCommonRainOptions | undefined
+  private options: VideoRainOptions | undefined
   private readonly textureBgSize: TextureSize = {
     width: 384,
     height: 256
@@ -109,9 +108,10 @@ class VideoRain {
   private curWeatherData: WeatherOptions | null = null
   private blend: Blend = { v: 0 }
 
-  public async loadTextures(selector: string, options: LoadTexturesOptions): Promise<void> {
+  public async loadTextures(selector: string, options: VideoLoadTexturesOptions): Promise<void> {
     const { bg, fg, dropColor, dropAlpha, onInit, ...other } = options || {}
     this.options = options
+    if (!options.video) throw new Error('video element not found')
     this.videoBg = document.querySelector(options.video) as HTMLVideoElement
     if (!this.videoBg) {
       throw new Error('video element not found')

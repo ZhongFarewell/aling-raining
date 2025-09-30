@@ -4,8 +4,6 @@ import Raindrops from './raindrops'
 import loadImages from './image-loader'
 import createCanvas from './create-canvas'
 import TweenLite, { Quint } from 'gsap'
-import times from './times'
-import { random, chance } from './random'
 
 // 类型定义
 interface WeatherOptions {
@@ -30,10 +28,13 @@ interface WeatherOptions {
 interface WeatherData {
   [key: string]: WeatherOptions
 }
-export interface BaseCommonRainOptions {
-  bg: string
-  onInit?: () => void
+export interface BaseCommonRainOptions extends BaseRainOptions {
+  bg?: string
   fg?: string
+}
+export interface BaseRainOptions {
+  onInit?: () => void
+
   dropColor: string
   dropAlpha: string
   onAbort?: () => void
@@ -41,7 +42,7 @@ export interface BaseCommonRainOptions {
   maxR?: number // 最大水滴半径
   maxDrops?: number // 最大水滴数量
 }
-interface LoadTexturesOptions extends BaseCommonRainOptions {
+export interface CommonLoadTexturesOptions extends BaseCommonRainOptions {
   [key: string]: any
 }
 
@@ -109,8 +110,9 @@ class CommonRain {
   private curWeatherData: WeatherOptions | null = null
   private blend: Blend = { v: 0 }
 
-  public async loadTextures(selector: string, options: LoadTexturesOptions): Promise<void> {
+  public async loadTextures(selector: string, options: CommonLoadTexturesOptions): Promise<void> {
     const { bg, fg, dropColor, dropAlpha, onInit, ...other } = options || {}
+    if (!bg) throw new Error('bg is required')
     this.options = options
 
     try {

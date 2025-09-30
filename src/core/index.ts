@@ -1,11 +1,11 @@
-import CommonRain, { BaseCommonRainOptions } from './common-rain'
-import VideoRain from './video-rain'
-export interface RainOptions extends BaseCommonRainOptions {
+import CommonRain, { BaseRainOptions, CommonLoadTexturesOptions } from './common-rain'
+import VideoRain, { VideoLoadTexturesOptions, VideoRainOptions } from './video-rain'
+export interface RainOptions extends BaseRainOptions {
   video?: string
 }
 export default class Rain {
   private _id: string
-  private _options: RainOptions
+  private _options: VideoLoadTexturesOptions | CommonLoadTexturesOptions
   private instance: CommonRain | VideoRain
   constructor(id: string, options: RainOptions) {
     this._id = id
