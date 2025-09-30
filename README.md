@@ -11,7 +11,7 @@ npm install aling-raining
 ```
 
 ## 预览
-![demo](https://zhongfw.online/align-minio/memoryimage/d9b32a87dbf89575e5769f4ef990ff27.gif)
+![d9b32a87dbf89575e5769f4ef990ff27 (1)](https://github.com/user-attachments/assets/3fca7e47-f11f-41a9-8aa6-7763a2a5935d)
 
 
 ## 开发
