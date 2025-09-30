@@ -1,6 +1,6 @@
 {
   "name": "aling-raining",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "下雨的效果",
   "main": "./dist/lib/index.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "dist/lib"
   ],
   "keywords": [
-    "raine effect",
+    "rain effect",
     "raining",
     "typescript"
   ],

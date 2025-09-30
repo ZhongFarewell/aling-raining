@@ -12,3 +12,12 @@ npm install aling-raining
 
 ## 预览
 ![demo](https://zhongfw.online/align-minio/memoryimage/d9b32a87dbf89575e5769f4ef990ff27.gif)
+
+
+## 开发
+
+```bash
+cd demo
+npm install
+npm start
+```

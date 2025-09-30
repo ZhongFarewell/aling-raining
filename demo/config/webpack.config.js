@@ -1,7 +1,7 @@
 const path = require("path")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 module.exports = {
-  entry: "/src/aling/index.tsx",
+  entry: "/index.tsx",
   mode: "development",
   output: {
     path: path.resolve(__dirname, "../dist"),
@@ -25,8 +25,8 @@ module.exports = {
     // 未指定后缀名的文件将尝试使用下列后缀进行拓展查找
     extensions: [".ts", ".tsx", ".js"],
     alias: {
-      "@": path.resolve(__dirname, "../src"), // 配置路径别名
-      "@@": path.resolve(__dirname, "../src/aling"), // 配置路径别名
+      "@": path.resolve(__dirname, "../../src"), // 配置路径别名
+      "@@": path.resolve(__dirname, "../../demo"), // 配置路径别名
     },
     // Add support for TypeScripts fully qualified ESM imports.
     extensionAlias: {

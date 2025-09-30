@@ -4,8 +4,7 @@ import Raindrops from './raindrops'
 import loadImages from './image-loader'
 import createCanvas from './create-canvas'
 import TweenLite, { Quint } from 'gsap'
-import times from './times'
-import { random, chance } from './random'
+import { BaseCommonRainOptions } from './common-rain'
 
 // 类型定义
 interface WeatherOptions {
@@ -30,10 +29,10 @@ interface WeatherOptions {
 interface WeatherData {
   [key: string]: WeatherOptions
 }
-export interface BaseCommonRainOptions {
-  bg: string
+export interface VideoRainOptions extends BaseCommonRainOptions {
   onInit?: () => void
   fg?: string
+  video: string
   dropColor: string
   dropAlpha: string
   onAbort?: () => void
@@ -70,7 +69,7 @@ interface FlashValue {
   v: number
 }
 
-class CommonRain {
+class VideoRain {
   private textureRainFg!: HTMLImageElement
   private textureRainBg!: HTMLImageElement
   private textureStormLightningFg!: HTMLImageElement
@@ -81,6 +80,7 @@ class CommonRain {
   private textureSunBg!: HTMLImageElement
   private textureDrizzleFg!: HTMLImageElement
   private textureDrizzleBg!: HTMLImageElement
+  private videoBg!: HTMLVideoElement
   private dropColor!: HTMLImageElement
   private dropAlpha!: HTMLImageElement
 
@@ -112,14 +112,14 @@ class CommonRain {
   public async loadTextures(selector: string, options: LoadTexturesOptions): Promise<void> {
     const { bg, fg, dropColor, dropAlpha, onInit, ...other } = options || {}
     this.options = options
-
+    this.videoBg = document.querySelector(options.video) as HTMLVideoElement
+    if (!this.videoBg) {
+      throw new Error('video element not found')
+    }
     try {
       const images: LoadedImages = await loadImages([
         { name: 'dropAlpha', src: dropAlpha },
-        { name: 'dropColor', src: dropColor },
-
-        { name: 'textureRainFg', src: fg ?? bg },
-        { name: 'textureRainBg', src: bg }
+        { name: 'dropColor', src: dropColor }
 
         //{ name: "textureStormLightningFg", src: "img/weather/texture-storm-lightning-fg.png" },
         //{ name: "textureStormLightningBg", src: "img/weather/texture-storm-lightning-bg.png" },
@@ -133,9 +133,6 @@ class CommonRain {
         //{ name: "textureDrizzleFg", src: "img/weather/texture-drizzle-fg.png" },
         //{ name: "textureDrizzleBg", src: "img/weather/texture-drizzle-bg.png" },
       ])
-
-      this.textureRainFg = images.textureRainFg.img
-      this.textureRainBg = images.textureRainBg.img
 
       // this.textureFalloutFg = images.textureFalloutFg.img
       // this.textureFalloutBg = images.textureFalloutBg.img
@@ -175,10 +172,10 @@ class CommonRain {
       this.dropAlpha,
       this.dropColor,
       {
-        trailRate: 1,
-        trailScaleRange: [0.2, 0.45],
-        collisionRadius: 0.45,
-        dropletsCleaningRadiusMultiplier: 0.28,
+        collisionRadiusIncrease: 0.002,
+        dropletsRate: 35,
+        dropletsSize: [3, 7.5],
+        dropletsCleaningRadiusMultiplier: 0.3,
         ...JSON.parse(
           JSON.stringify({
             maxDrops: this.options?.maxDrops,
@@ -194,7 +191,7 @@ class CommonRain {
     this.textureBg = createCanvas(this.textureBgSize.width, this.textureBgSize.height)
     this.textureBgCtx = this.textureBg.getContext('2d')!
 
-    this.generateTextures(this.textureRainFg, this.textureRainBg)
+    this.generateTextures()
 
     this.renderer = new RainRenderer(
       this.canvas,
@@ -203,9 +200,10 @@ class CommonRain {
       this.textureBg,
       null,
       {
-        brightness: 1.04,
+        brightness: 1.1,
         alphaMultiply: 6,
-        alphaSubtract: 3
+        alphaSubtract: 3,
+        parallaxFg: 40
         // minRefraction:256,
         // maxRefraction:512
       }
@@ -218,12 +216,6 @@ class CommonRain {
     this.raindrops.abort()
     this.renderer.abort()
     this.options?.onAbort?.()
-  }
-
-  private setupEvents(): void {
-    this.setupParallax()
-    //this.setupWeather();
-    //this.setupFlash();
   }
 
   private setupParallax(): void {
@@ -359,14 +351,40 @@ class CommonRain {
   //       transitionFlash(0, 0.25)
   //     })
   // }
+  private setupEvents() {
+    this.updateTextures()
+    this.setupParallax()
+  }
+  private updateTextures() {
+    this.generateTextures()
+    this.renderer.updateTextures()
 
-  private generateTextures(fg: HTMLImageElement, bg: HTMLImageElement, alpha: number = 1): void {
-    this.textureFgCtx.globalAlpha = alpha
-    this.textureFgCtx.drawImage(fg, 0, 0, this.textureFgSize.width, this.textureFgSize.height)
-
-    this.textureBgCtx.globalAlpha = alpha
-    this.textureBgCtx.drawImage(bg, 0, 0, this.textureBgSize.width, this.textureBgSize.height)
+    requestAnimationFrame(this.updateTextures.bind(this))
+  }
+  private generateTextures(): void {
+    this.textureFgCtx.drawImage(
+      this.videoBg,
+      0,
+      this.textureBgSize.height,
+      this.textureFgSize.width,
+      this.textureFgSize.height,
+      0,
+      0,
+      this.textureFgSize.width,
+      this.textureFgSize.height
+    )
+    this.textureBgCtx.drawImage(
+      this.videoBg,
+      0,
+      0,
+      this.textureBgSize.width,
+      this.textureBgSize.height,
+      0,
+      0,
+      this.textureBgSize.width,
+      this.textureBgSize.height
+    )
   }
 }
 
-export default CommonRain
+export default VideoRain

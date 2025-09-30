@@ -7,3 +7,10 @@ A WebGL-based raindrop effect library with TypeScript support. This project is a
 ```bash
 npm install aling-raining
 ```
+## Develop
+
+```bash
+cd demo
+npm install
+npm start
+```
