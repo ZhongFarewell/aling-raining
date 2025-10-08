@@ -11,7 +11,12 @@ npm install aling-raining
 ```
 
 ## 预览
+
+### 图片背景
 ![d9b32a87dbf89575e5769f4ef990ff27 (1)](https://github.com/user-attachments/assets/3fca7e47-f11f-41a9-8aa6-7763a2a5935d)
+
+### 视频背景
+![screen_recording_2025-09-30_17-28-41~1](https://github.com/user-attachments/assets/29d86774-0a5f-4cc9-a424-d8bf828e44a3)
 
 
 ## 开发
